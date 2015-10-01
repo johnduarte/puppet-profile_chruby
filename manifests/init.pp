@@ -126,7 +126,7 @@ class profile_chruby (
     require => User[$username],
   }
 
-  exec {  "grep -q -F '${shellrc}' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.bashrc\" ] ; then\n  source \"\${HOME}/.bashrc\"\nfi' >> ${home}/.bash_profile":
+  exec {  "grep -q -F '.bashrc' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.bashrc\" ] ; then\n  source \"\${HOME}/.bashrc\"\nfi' >> ${home}/.bash_profile":
     require => File["${home}/.bash_profile"],
   }
 
