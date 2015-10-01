@@ -9,6 +9,8 @@ class profile_chruby (
 #grep=$(which grep)
 #shellrc=.$(echo $SHELL | cut -d / -f 3)rc
 
+  Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
+
   Package {
     provider => $::osfamily ? {
       Darwin  => 'brew',
@@ -20,11 +22,26 @@ class profile_chruby (
       $home = "/Users/${username}"
       $managehome = false
       $chruby_group = 'wheel'
+      $group = 'staff'
+      $sudo_group = 'wheel'
+      warning('sudo package installation not supported on OS X')
+      file { $home:
+        ensure  => directory,
+        owner   => $username,
+        group   => $group,
+        require => User[$username],
+      }
     }
     default: {
       $home = "/home/${username}"
       $managehome = true
       $chruby_group = 'root'
+      $group = $username
+      $sudo_group = 'sudo'
+      package { 'sudo':
+        ensure => present,
+        before => User[$username],
+      }
     }
   }
 
@@ -34,16 +51,11 @@ class profile_chruby (
     before => Class['chruby'],
   }
 
-  package { 'sudo':
-    ensure => present,
-    before => User[$username],
-  }
-
   user { $username:
     ensure     => present,
     managehome => $managehome,
     shell      => '/bin/bash',
-    groups     => ['sudo'],
+    groups     => [$sudo_group],
   }
 
   class { 'ruby_build':
@@ -59,7 +71,7 @@ class profile_chruby (
   file{ "${home}/.ssh":
     ensure  => directory,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     mode    => '0600',
     require => User[$username],
   }
@@ -67,7 +79,7 @@ class profile_chruby (
   file{ "${home}/.ssh/id_rsa-acceptance":
     ensure  => present,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     mode    => '0600',
     content => $acceptance_key,
     require => User[$username],
@@ -76,7 +88,7 @@ class profile_chruby (
   file{ "${home}/.bashrc":
     ensure  => present,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     require => User[$username],
   }
 
@@ -95,26 +107,26 @@ class profile_chruby (
     ensure  => present,
     content => $ruby_ver,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     require => User[$username],
   }
 
   file{"${home}/.bash_profile":
     ensure  => present,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     require => User[$username],
   }
 
   file{"${home}/.fog":
     ensure  => present,
     owner   => $username,
-    group   => $username,
+    group   => $group,
     mode    => '0600',
     require => User[$username],
   }
 
-  exec {  "/bin/grep -q -F '${shellrc}' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.bashrc\" ] ; then\n  source \"\${HOME}/.bashrc\"\nfi' >> ${home}/.bash_profile":
+  exec {  "grep -q -F '${shellrc}' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.bashrc\" ] ; then\n  source \"\${HOME}/.bashrc\"\nfi' >> ${home}/.bash_profile":
     require => File["${home}/.bash_profile"],
   }
 
