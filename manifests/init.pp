@@ -32,12 +32,23 @@ class profile_chruby (
         require => User[$username],
       }
     }
-    default: {
+    'Debian': {
       $home = "/home/${username}"
       $managehome = true
       $chruby_group = 'root'
       $group = $username
       $sudo_group = 'sudo'
+      package { 'sudo':
+        ensure => present,
+        before => User[$username],
+      }
+    }
+    default: {
+      $home = "/home/${username}"
+      $managehome = true
+      $chruby_group = 'root'
+      $group = $username
+      $sudo_group = 'wheel'
       package { 'sudo':
         ensure => present,
         before => User[$username],
