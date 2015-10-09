@@ -113,6 +113,16 @@ class profile_chruby (
     line    => 'source /usr/local/share/chruby/auto.sh',
     require => File["${home}/.bashrc"],
   }
+  file_line{'Add ssh-agent to .bashrc':
+    path    => "${home}/.bashrc",
+    line    => 'eval `ssh-agent`',
+    require => File["${home}/.bashrc"],
+  }
+  file_line{'Add ssh-add to .bashrc':
+    path    => "${home}/.bashrc",
+    line    => 'ssh-add ~/.ssh/id_rsa-acceptance',
+    require => File_line['Add ssh-agent to .bashrc'],
+  }
 
   file{"${home}/.ruby-version":
     ensure  => present,
