@@ -9,7 +9,7 @@ class profile_chruby (
 #grep=$(which grep)
 #shellrc=.$(echo $SHELL | cut -d / -f 3)rc
 
-  Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
   Package {
     provider => $::osfamily ? {
