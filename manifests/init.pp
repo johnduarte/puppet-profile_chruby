@@ -150,7 +150,7 @@ class profile_chruby (
   # ensure that .profile and .bashrc are sourced
   # .profile should be first
   # .bashrc should be last
-  exec {  "grep -q -F '.profile' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.profile\" ] ; then\n  source \"\${HOME}/.bashrc\"\nfi' > /tmp/bash_profile && cat ${home}/.bash_profile >> /tmp/bash_profile && mv /tmp/bash_profile ${home}/.bash_profile":
+  exec {  "grep -q -F '.profile' ${home}/.bash_profile || echo 'if [ -f \"\${HOME}/.profile\" ] ; then\n  source \"\${HOME}/.profile\"\nfi' > /tmp/bash_profile && cat ${home}/.bash_profile >> /tmp/bash_profile && mv /tmp/bash_profile ${home}/.bash_profile":
     require => File["${home}/.bash_profile"],
   }
   ->
