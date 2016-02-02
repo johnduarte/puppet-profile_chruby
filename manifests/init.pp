@@ -159,4 +159,9 @@ class profile_chruby (
   }
 
   ruby_build::install_ruby { $ruby_ver: }
+
+  ->
+  # install bundler
+  exec { "/bin/su - ${username} && /opt/rubies/${ruby_ver}/bin/gem install bundler": }
+
 }
