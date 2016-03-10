@@ -1,13 +1,8 @@
 #
 class profile_chruby (
   $username = 'puppet',
-  $ruby_ver = '2.1.6',
-  $acceptance_key
+  $ruby_ver = '2.1.6'
 ) {
-
-# set variables
-#grep=$(which grep)
-#shellrc=.$(echo $SHELL | cut -d / -f 3)rc
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
@@ -79,23 +74,6 @@ class profile_chruby (
     group   => $chruby_group,
   }
 
-  file{ "${home}/.ssh":
-    ensure  => directory,
-    owner   => $username,
-    group   => $group,
-    mode    => '0600',
-    require => User[$username],
-  }
-
-  file{ "${home}/.ssh/id_rsa-acceptance":
-    ensure  => present,
-    owner   => $username,
-    group   => $group,
-    mode    => '0600',
-    content => $acceptance_key,
-    require => User[$username],
-  }
-
   file{ "${home}/.bashrc":
     ensure  => present,
     owner   => $username,
@@ -113,16 +91,6 @@ class profile_chruby (
     line    => 'source /usr/local/share/chruby/auto.sh',
     require => File["${home}/.bashrc"],
   }
-  file_line{'Add ssh-agent to .bashrc':
-    path    => "${home}/.bashrc",
-    line    => 'eval `ssh-agent`',
-    require => File["${home}/.bashrc"],
-  }
-  file_line{'Add ssh-add to .bashrc':
-    path    => "${home}/.bashrc",
-    line    => 'ssh-add ~/.ssh/id_rsa-acceptance',
-    require => File_line['Add ssh-agent to .bashrc'],
-  }
 
   file{"${home}/.ruby-version":
     ensure  => present,
@@ -139,14 +107,6 @@ class profile_chruby (
     require => User[$username],
   }
 
-  file{"${home}/.fog":
-    ensure  => present,
-    owner   => $username,
-    group   => $group,
-    mode    => '0600',
-    require => User[$username],
-  }
-
   # ensure that .profile and .bashrc are sourced
   # .profile should be first
   # .bashrc should be last
@@ -160,8 +120,5 @@ class profile_chruby (
 
   ruby_build::install_ruby { $ruby_ver: }
 
-  ->
-  # install bundler
-  exec { "su - ${username} && /opt/rubies/${ruby_ver}/bin/gem install bundler": }
 
 }
