@@ -1,0 +1,16 @@
+---
+HOSTS:
+  osx-1011-x86_64-agent:
+    roles:
+      - agent
+    platform: osx-10.11-x86_64
+    template: Delivery/Quality Assurance/Templates/vCloud/osx-1011-x86_64
+    hypervisor: vcloud
+CONFIG:
+  masterless: true
+  nfs_server: none
+  consoleport: 443
+  datastore: instance0
+  folder: Delivery/Quality Assurance/Enterprise/Dynamic
+  resourcepool: delivery/Quality Assurance/Enterprise/Dynamic
+  pooling_api: http://vmpooler.delivery.puppetlabs.net/
