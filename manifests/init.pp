@@ -11,12 +11,6 @@ class profile_chruby (
 
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
-  Package {
-    provider => $::osfamily ? {
-      Darwin  => 'brew',
-      default => undef
-    }
-  }
   case $::osfamily {
     'Darwin': {
       $home = "/Users/${username}"
