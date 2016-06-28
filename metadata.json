@@ -8,11 +8,11 @@
   "project_page": null,
   "issues_url": null,
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
-    {"name":"puppetlabs-git","version_requirement":">= 0.0.1"},
-    {"name":"puppetlabs-vcsrepo","version_requirement":">= 0.2.0"},
-    {"name":"nanliu-staging","version_requirement":">= 0.3.1"},
-    {"name":"justinstoller-chruby","version_requirement":">= 0.1.1"},
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-git","version_requirement":">= 0.0.1"}
+    {"name":"puppetlabs-vcsrepo","version_requirement":">= 0.2.0"}
+    {"name":"nanliu-staging","version_requirement":">= 0.3.1"}
+    {"name":"justinstoller-chruby","version_requirement":">= 0.1.1"}
     {"name":"justinstoller-ruby_build","version_requirement":">= 0.1.0"}
   ]
 }
